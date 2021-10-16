@@ -2,6 +2,7 @@
 #include <cassert>
 #include <iostream>
 #include <string>
+#include <filesystem>
 
 #include ".NET 5.0.10/nethost.h"
 #include "fxr.hpp"
@@ -51,9 +52,6 @@ void GetFxr(std::wstring& path, size_t& pathsize, const get_hostfxr_parameters* 
 		get_hostfxr_path(nullptr, &pathsize, p);
 }
 
-// 自行copy托管入口
-// error : 项目“..\ManagedEntry\ManagedEntry.csproj”指向“net5.0”。它不能被指向“.NETFramework,Version=v4.0”的项目引用。
-
 int wmain(int argc, wchar_t* argv[])
 {
 	std::wcout.imbue(std::locale{ "" });
@@ -100,6 +98,21 @@ int wmain(int argc, wchar_t* argv[])
 	if (FAILED(hr))
 		return hr;
 
+	try
+	{
+		std::filesystem::path cd = std::filesystem::canonical(L".\\");
+		wcout << L"\nset APP_PATH and NATIVE_DLL_SEARCH_DIRECTORIES\n";
+		fxr.SetRtProp(fxr.Handle, L"APP_PATHS", cd.c_str());
+		const wchar_t* old_native = nullptr;
+		fxr.GetRtProp(fxr.Handle, L"NATIVE_DLL_SEARCH_DIRECTORIES", &old_native);
+		path.assign(cd.native()).append(old_native);
+		fxr.SetRtProp(fxr.Handle, L"NATIVE_DLL_SEARCH_DIRECTORIES", path.c_str());
+	}
+	catch (std::filesystem::filesystem_error& e)
+	{
+		wcout << L"fs errc:" << e.code().value() << L", path:" << e.path1().c_str();
+	}
+
 	wcout << L"\ninspect props\n";
 	{
 		std::vector<const wchar_t*> k, v;
@@ -127,22 +140,28 @@ int wmain(int argc, wchar_t* argv[])
 	load_assembly_and_get_function_pointer_fn LoadAsmForFunc = nullptr;
 	typedef int (__cdecl *unhandled_exception_listener)(HRESULT hr, const wchar_t* message, const wchar_t* desc);
 	int(__cdecl * managedEntry)(int, int) = nullptr;
-	int(__cdecl * eh_surscibe)(unhandled_exception_listener listener);
+	int(__cdecl * eh_surscibe)(unhandled_exception_listener listener) = nullptr;
 	hr = (fxr.GetDelegate(fxr.Handle, hdt_load_assembly_and_get_function_pointer, (void**)&LoadAsmForFunc));
 	if (FAILED(hr))
 		return hr;
 
 	hr = LoadAsmForFunc(
-		L"ManagedEntry",
-		L"ManagedEntry.Entry5",
+		L"ManagedEntry.dll",
+		L"ManagedEntry.Entry5,ManagedEntry",
 		L"CdeclEntryPoint",
 		UNMANAGEDCALLERSONLY_METHOD,
 		nullptr,
 		(void**)&managedEntry
 	);
+	if (FAILED(hr))
+	{
+		path.resize(FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, hr, 2052, path.data(), path.size(), nullptr));
+		wcout << L"Failed to get managed entry, msg is :" << path << endl;
+		return hr;
+	}
 	hr = LoadAsmForFunc(
-		L"",
-		L"ManagedEntry.Entry5",
+		L"ManagedEntry.dll",
+		L"ManagedEntry.Entry5,ManagedEntry",
 		L"SubscribeUnhandledException",
 		UNMANAGEDCALLERSONLY_METHOD,
 		nullptr,
@@ -150,7 +169,8 @@ int wmain(int argc, wchar_t* argv[])
 	);
 	if (FAILED(hr))
 	{
-		wcout << L"Failed to get managed entry" << endl;
+		path.resize(FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, hr, 2052, path.data(), path.size(), nullptr));
+		wcout << L"Failed to get managed entry, msg is :" << path << endl;
 		return hr;
 	}
 

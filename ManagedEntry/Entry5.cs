@@ -23,7 +23,7 @@ namespace ManagedEntry
 		public static int CdeclEntryPoint(int l, int r)
 		{
 			AppDomain.CurrentDomain.UnhandledException += ManagedExceptionUnhandled;
-			Console.WriteLine("Invoke managed plugin");
+			Console.WriteLine("cw");
 			return l + r;
 		}
 
@@ -33,7 +33,7 @@ namespace ManagedEntry
 		/// <remarks>
 		/// void (__cdecl* unhandled_exception_listener)(HRESULT hr, const wchar_t* message, const wchar_t* desc)
 		/// </remarks>
-		internal static HostNotifyException notifyHost;
+		internal static event HostNotifyException NotifyHost;
 
 		/// <param name="functionpointer">
 		/// void (__cdecl* unhandled_exception_listener)(HRESULT hr, const wchar_t* message, const wchar_t* desc)
@@ -46,7 +46,7 @@ namespace ManagedEntry
 			{
 				// Suppose `static class System.Runtime.Hosting` api family for hosting
 				var dlg = Marshal.GetDelegateForFunctionPointer<HostNotifyException>((IntPtr)functionpointer);
-				notifyHost += dlg;
+				NotifyHost += dlg;
 				return 0;
 			}
 			catch
@@ -65,10 +65,10 @@ namespace ManagedEntry
 		{
 			if (e.ExceptionObject is Exception clrException)
 				fixed (char* msg = clrException.Message, desc = clrException.ToString())
-					notifyHost(clrException.HResult, msg, desc);
+					NotifyHost?.Invoke(clrException.HResult, msg, desc);
 			else
 				fixed (char* msg = msg_not_clr_ex, desc = desc_not_clr_ex)
-					notifyHost(E_FAIL, msg, desc);
+					NotifyHost?.Invoke(E_FAIL, msg, desc);
 		}
 	}
 }

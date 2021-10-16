@@ -5,4 +5,8 @@
     <Platforms>AnyCPU;x64;x86</Platforms>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\ManagedEntry\ManagedEntry.csproj" />
+  </ItemGroup>
+
 </Project>
