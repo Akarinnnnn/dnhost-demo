@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<Target BeforeTargets="PrepareForBuild" Name="BuildManagedComponent">
+		<Message Importance="high" Text="Build Managed Target:$(SolutionDir)ManagedComponent.sln" />
+		<MSBuild Projects="$(SolutionDir)ManagedComponent.sln"
+				 Properties="Configuration=$(Configuration)"
+				 Targets="Build"
+				 StopOnFirstFailure="true"
+				 SkipNonexistentProjects="false"
+				 >
+			<Output PropertyName="ManagedAssemblies" TaskParameter="TargetOutputs"/>
+		</MSBuild>
+		<Message Importance="high" Text="MSBuild managedcomponent out:" />
+		<Message Importance="high" Text="$(ManagedAssemblies)" />
+
+		<Copy DestinationFolder="$(OutDir)" SourceFiles="$(ManagedAssemblies)" />
+	</Target>
+</Project>
