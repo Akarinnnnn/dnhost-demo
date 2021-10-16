@@ -25,6 +25,9 @@
     <RootNamespace>NativeHost</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
+  <ImportGroup Label="Managed components">
+	<Import Project="$(MSBuildThisFileDirectory)ReferenceManaged.props" />
+  </ImportGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -165,10 +168,9 @@
     <ClCompile Include="Main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="BuildManaged.targets" />
+    <None Include="ReferenceManaged.props" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
-    <Import Project="$(MSBuildThisFileDirectory)BuildManaged.targets" />
   </ImportGroup>
 </Project>

@@ -55,6 +55,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="BuildManaged.targets" />
+    <None Include="ReferenceManaged.props" />
   </ItemGroup>
 </Project>
