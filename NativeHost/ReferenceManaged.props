@@ -8,4 +8,13 @@
 						  SetPlatform="AnyCPU"
 						  SkipGetTargetFrameworkProperties="true" />
 	</ItemGroup>
+	<ItemDefinitionGroup Label="Linker">
+		<Link>
+			<AdditionalDependencies>nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+			<AdditionalLibraryDirectories>$(SolutionDir)SDK Files\5.0.10\$(PlatformShortName)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+		</Link>
+	</ItemDefinitionGroup>
+	<Target AfterTargets="CopyFilesToOutputDirectory" Outputs="$(OutDir)nethost.dll" Name="CopyHostFxrLocator">
+		<Copy SourceFiles="$(SolutionDir)SDK Files\5.0.10\$(PlatformShortName)\nethost.dll" DestinationFolder="$(OutDir)" />
+	</Target>
 </Project>
