@@ -55,7 +55,7 @@ void GetFxr(std::wstring& path, size_t& pathsize, const get_hostfxr_parameters* 
 int wmain(int argc, wchar_t* argv[])
 {
 	std::wcout.imbue(std::locale{ "" });
-	std::wstring path{ 260, L'\0', std::allocator<wchar_t>{} };
+	std::wstring strbuff{ 260, L'\0', std::allocator<wchar_t>{} };
 	HRESULT hr = S_OK;
 	clrerr = CreateFileW(
 		L".\\CLR Error Log.txt",
@@ -69,24 +69,24 @@ int wmain(int argc, wchar_t* argv[])
 	WriteFile(clrerr, L"\ufeff", 4, nullptr, nullptr);
 
 	size_t pathsize = 260;
-	GetFxr(path, pathsize, nullptr);
-	wcout << path << endl;
+	GetFxr(strbuff, pathsize, nullptr);
+	wcout << strbuff << endl;
 
 	#if 0 // advanced search
 	get_hostfxr_parameters param{ sizeof(param), nullptr, nullptr };
 	param.assembly_path = LR"(your\custom\hostfxr\directory)";
-	GetFxr(path, pathsize, &param);
-	wcout << path << endl;
+	GetFxr(strbuff, pathsize, &param);
+	wcout << strbuff << endl;
 
 	param.assembly_path = nullptr;
 	param.dotnet_root = LR"(..\Build\Debug_x64\)"; // where dotnet.exe locates
-	GetFxr(path, pathsize, &param);
-	wcout << path << endl;
+	GetFxr(strbuff, pathsize, &param);
+	wcout << strbuff << endl;
 	#endif
 
 	#if 1 // FXR Test
 	wcout << L"demo fxr" << endl;
-	auto hfxr = LoadLibraryW(path.c_str());
+	auto hfxr = LoadLibraryW(strbuff.c_str());
 	fxr.Load(hfxr);
 	fxr.SetErrorWriter(err_writer);
 	hr = fxr.InitCfg(
@@ -105,8 +105,8 @@ int wmain(int argc, wchar_t* argv[])
 		fxr.SetRtProp(fxr.Handle, L"APP_PATHS", cd.c_str());
 		const wchar_t* old_native = nullptr;
 		fxr.GetRtProp(fxr.Handle, L"NATIVE_DLL_SEARCH_DIRECTORIES", &old_native);
-		path.assign(cd.native()).append(old_native);
-		fxr.SetRtProp(fxr.Handle, L"NATIVE_DLL_SEARCH_DIRECTORIES", path.c_str());
+		strbuff.assign(cd.native()).append(old_native);
+		fxr.SetRtProp(fxr.Handle, L"NATIVE_DLL_SEARCH_DIRECTORIES", strbuff.c_str());
 	}
 	catch (std::filesystem::filesystem_error& e)
 	{
@@ -144,6 +144,40 @@ int wmain(int argc, wchar_t* argv[])
 	hr = (fxr.GetDelegate(fxr.Handle, hdt_load_assembly_and_get_function_pointer, (void**)&LoadAsmForFunc));
 	if (FAILED(hr))
 		return hr;
+	auto hcoreclr = GetModuleHandleW(L"coreclr.dll");
+	assert(hcoreclr);
+	auto GetClrRuntimeHost = (FnGetCLRRuntimeHost)GetProcAddress(hcoreclr, "GetCLRRuntimeHost");
+	assert(GetClrRuntimeHost);
+
+	ICLRRuntimeHost4* host4 = nullptr;
+	hr = GetClrRuntimeHost(IID_ICLRRuntimeHost4, (IUnknown**)&host4);
+	if (FAILED(hr))
+	{
+		strbuff.resize(FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, hr, 2052, strbuff.data(), strbuff.capacity(), nullptr));
+		wcout << L"Failed to find ICLRRuntimeHost, msg is :" << strbuff << endl;
+		return hr;
+	}
+	// https://docs.microsoft.com/zh-cn/dotnet/framework/unmanaged-api/hosting/startup-flags-enumeration
+	// 我超，不太敢用
+	/*host4->SetStartupFlags(
+		(STARTUP_FLAGS)(STARTUP_CONCURRENT_GC | STARTUP_LOADER_OPTIMIZATION_SINGLE_DOMAIN)
+	);*/
+
+	// 你他妈根本不实现是吗？
+	// ICLRControl* clr4 = nullptr;
+	// host4->GetCLRControl(&clr4);
+
+	// host2新东西
+	DWORD appdomainId = 0;
+	INT_PTR entryDlg = 0;
+	host4->GetCurrentAppDomainId(&appdomainId);
+	host4->CreateDelegate(
+		appdomainId,
+		L"ManagedEntry",
+		L"ManagedEntry.Entry5",
+		L"CdeclEntryPoint",
+		&entryDlg
+	);
 
 	hr = LoadAsmForFunc(
 		L"ManagedEntry.dll",
@@ -153,10 +187,16 @@ int wmain(int argc, wchar_t* argv[])
 		nullptr,
 		(void**)&managedEntry
 	);
+
+	wcout << L"Entry from c-style abi:\n"
+		<< (UINT_PTR)managedEntry
+		<< L"\nEntry from COM abi:\n"
+		<< (UINT_PTR)entryDlg << endl;
+
 	if (FAILED(hr))
 	{
-		path.resize(FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, hr, 2052, path.data(), path.size(), nullptr));
-		wcout << L"Failed to get managed entry, msg is :" << path << endl;
+		strbuff.resize(FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, hr, 2052, strbuff.data(), strbuff.capacity(), nullptr));
+		wcout << L"Failed to get managed entry, msg is :" << strbuff << endl;
 		return hr;
 	}
 	hr = LoadAsmForFunc(
@@ -169,8 +209,8 @@ int wmain(int argc, wchar_t* argv[])
 	);
 	if (FAILED(hr))
 	{
-		path.resize(FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, hr, 2052, path.data(), path.size(), nullptr));
-		wcout << L"Failed to get managed entry, msg is :" << path << endl;
+		strbuff.resize(FormatMessageW(FORMAT_MESSAGE_FROM_SYSTEM, nullptr, hr, 2052, strbuff.data(), strbuff.capacity(), nullptr));
+		wcout << L"Failed to get managed entry, msg is :" << strbuff << endl;
 		return hr;
 	}
 
@@ -179,12 +219,8 @@ int wmain(int argc, wchar_t* argv[])
 	#if 0 // clr interface
 
 	auto hcoreclr = GetModuleHandleW(L"coreclr.dll");
-	auto GetClrRuntimeHost = (FnGetCLRRuntimeHost)GetProcAddress(hcoreclr, "GetCLRRuntimeHost");
-	assert(hcoreclr && GetClrRuntimeHost);
 
-	ICLRRuntimeHost4* host4 = nullptr;
-
-	//hr = GetClrRuntimeHost(IID_ICLRRuntimeHost4, &host4);
+	//
 	// host4->  
 	#endif
 
