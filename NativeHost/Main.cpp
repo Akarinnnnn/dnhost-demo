@@ -189,9 +189,9 @@ int wmain(int argc, wchar_t* argv[])
 	);
 
 	wcout << L"Entry from c-style abi:\n"
-		<< (UINT_PTR)managedEntry
+		<< (void*)managedEntry
 		<< L"\nEntry from COM abi:\n"
-		<< (UINT_PTR)entryDlg << endl;
+		<< (void*)entryDlg << endl;
 
 	if (FAILED(hr))
 	{
@@ -216,14 +216,7 @@ int wmain(int argc, wchar_t* argv[])
 
 	int ret = managedEntry(1, 2);
 	wcout << L"Returned value:" << ret << endl;
-	#if 0 // clr interface
-
-	auto hcoreclr = GetModuleHandleW(L"coreclr.dll");
-
-	//
-	// host4->  
-	#endif
-
+	
 	// assert(SetEnvironmentVariableW(L"SDL_AUDIODRIVER", L"winmm") == 0);
 	// HRESULT hr = CoInitialize(nullptr);
 	// assert(hr >= 0); // 

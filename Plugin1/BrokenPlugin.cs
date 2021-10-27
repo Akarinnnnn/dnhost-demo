@@ -1,9 +1,10 @@
 ﻿using Plugins;
 using System;
-using System.Runtime.CompilerServices;
+using System.ComponentModel.Composition;
 
 namespace SimplePlugin
 {
+	[Export(typeof(IPlugin))]
 	public class BrokenPlugin : IPlugin
 	{
 		public void AnyAction()

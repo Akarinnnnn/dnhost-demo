@@ -1,8 +1,10 @@
 ﻿using Plugins;
 using System;
+using System.ComponentModel.Composition;
 
 namespace SimplePlugin
 {
+	[Export(typeof(IPlugin))]
 	public class Plugin1 : IPlugin
 	{
 		string inputstr;

@@ -361,5 +361,6 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/Build/Debug_x64
-/ApiTest/Properties/launchSettings.json
+
+/Build
+**/launchSettings.json

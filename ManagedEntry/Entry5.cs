@@ -2,7 +2,11 @@
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
-using System.ComponentModel;
+using Plugins;
+using System.Collections.Generic;
+using System.ComponentModel.Composition;
+using System.ComponentModel.Composition.Hosting;
+using System.IO;
 
 namespace ManagedEntry
 {
@@ -12,7 +16,37 @@ namespace ManagedEntry
 
 	internal class Plugins
 	{
+		[ImportMany]
+		private List<IPlugin> plugins { get; set; }
 
+		private void Compose()
+		{
+			AssemblyCatalog cat = new(Path.GetDirectoryName("."));
+			CompositionContainer container = new(cat);
+			container.ComposeParts(this);
+		}
+
+		public Plugins()
+		{
+			Compose();
+		}
+
+		public void InvokePlugins(string s)
+		{
+			foreach (IPlugin plugin in plugins)
+			{
+				try
+				{
+					plugin.AnyAction();
+				}
+				catch (Exception e)
+				{
+					Console.WriteLine(e.ToString());
+					Console.WriteLine("?");
+				}
+				plugin.ConsumeString(s);
+			}
+		}
 	}
 
 
@@ -24,6 +58,8 @@ namespace ManagedEntry
 		{
 			AppDomain.CurrentDomain.UnhandledException += ManagedExceptionUnhandled;
 			Console.WriteLine("cw");
+			Plugins p = new();
+			p.InvokePlugins("ashdadhkfh ");
 			return l + r;
 		}
 

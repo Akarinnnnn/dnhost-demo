@@ -1,6 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+	<PropertyGroup>
+		<RestoreProjectStyle>PackageReference</RestoreProjectStyle>
+	</PropertyGroup>
 	<ItemGroup Label="Managed Component References">
+		<!-- https://github.com/dotnet/msbuild/blob/35c6ef021eb745623b123307c2ebb55bf6564ef9/documentation/ProjectReference-Protocol.md -->
 		<ProjectReference Include="$(SolutionDir)ManagedEntry\ManagedEntry.csproj"
 						  SetPlatform="AnyCPU"
 						  SkipGetTargetFrameworkProperties="true" />
@@ -8,7 +12,7 @@
 						  SetPlatform="AnyCPU"
 						  SkipGetTargetFrameworkProperties="true" />
 	</ItemGroup>
-	<ItemDefinitionGroup Label="Linker">
+	<ItemDefinitionGroup Label="Link FxrLoactor">
 		<Link>
 			<AdditionalDependencies>nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
 			<AdditionalLibraryDirectories>$(SolutionDir)SDK Files\5.0.10\$(PlatformShortName)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
