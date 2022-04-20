@@ -7,7 +7,7 @@
 ## ICLRRuntimeHost2
 * CreateDelegate:  
 	备注：
-	1. 这条路子无视托管方法的可访问性  
+	1. ~这条路子无视托管方法的可访问性~现在不行了，必须是公开的  
 	2. 但必须是静态的  
 	3. 似乎可以直接调用，调用约定状况不明
 	4. 类型不能是开放泛型类型  
@@ -24,7 +24,7 @@
 	[CorHost2::CreateDelegate, corhost.cpp](https://github.com/dotnet/runtime/blob/7088332d24a276f557e1fe3612947fb17e0f04a3/src/coreclr/vm/corhost.cpp#L694-L786)
 
 * Authenticate：也是不做事的
-* RegisterMacEHPort: 屁事不干，当不存在
+* RegisterMacEHPort: 老东西
 * SetStartupFlags: 会清空旧的StartupFlags，而且你还拿不到旧的，小心使用
 * DllGetActivationFactory：感觉也是不做事的
 * ExecuteAssembly：
