@@ -7,10 +7,12 @@
 		<!-- https://github.com/dotnet/msbuild/blob/35c6ef021eb745623b123307c2ebb55bf6564ef9/documentation/ProjectReference-Protocol.md -->
 		<ProjectReference Include="$(SolutionDir)ManagedEntry\ManagedEntry.csproj"
 						  SetPlatform="AnyCPU"
-						  SkipGetTargetFrameworkProperties="true" />
+						  SkipGetTargetFrameworkProperties="true"
+						  />
 		<ProjectReference Include="$(SolutionDir)Plugin1\SimplePlugin.csproj"
 						  SetPlatform="AnyCPU"
-						  SkipGetTargetFrameworkProperties="true" />
+						  SkipGetTargetFrameworkProperties="true"
+						  />
 	</ItemGroup>
 	<ItemDefinitionGroup Label="Link FxrLoactor">
 		<Link>

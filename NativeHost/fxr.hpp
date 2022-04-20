@@ -1,5 +1,5 @@
 #pragma once
-#include ".NET 5.0.10/hostfxr.h"
+#include <6.0.4/inc/hostfxr.h>
 
 struct HostFxR
 {

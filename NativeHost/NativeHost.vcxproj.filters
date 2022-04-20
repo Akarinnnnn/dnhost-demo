@@ -13,26 +13,11 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
-    <Filter Include="头文件\.NET 5.0.10">
-      <UniqueIdentifier>{4158bb2b-c380-41de-9ea6-f0f40a919f7b}</UniqueIdentifier>
-    </Filter>
     <Filter Include="头文件\special">
       <UniqueIdentifier>{ac0c46ce-270d-4a87-b304-71b48dcdbadb}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include=".NET 5.0.10\hostfxr.h">
-      <Filter>头文件\.NET 5.0.10</Filter>
-    </ClInclude>
-    <ClInclude Include=".NET 5.0.10\coreclr_delegates.h">
-      <Filter>头文件\.NET 5.0.10</Filter>
-    </ClInclude>
-    <ClInclude Include=".NET 5.0.10\mscoree.h">
-      <Filter>头文件\.NET 5.0.10</Filter>
-    </ClInclude>
-    <ClInclude Include=".NET 5.0.10\nethost.h">
-      <Filter>头文件\.NET 5.0.10</Filter>
-    </ClInclude>
     <ClInclude Include="fxr.hpp">
       <Filter>头文件</Filter>
     </ClInclude>
