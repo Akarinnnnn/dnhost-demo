@@ -100,7 +100,10 @@
     1.  将原版 `osu!.exe` 及其依赖 DLL（**排除 `osu!auth.dll` 反作弊模块**）复制到 `osu.Loader` 输出目录。
     2.  再次运行 `osu.coreclr` 项目，应直接进入游戏主界面。
 
-> **💡 提示**：启动前建议将 Visual Studio 窗口移到另一个虚拟桌面，避免游戏全屏覆盖调试器。
+> **💡 提示**：
+> 1. 启动前建议将 Visual Studio 窗口移到另一个虚拟桌面，避免游戏全屏覆盖调试器。
+> 2. 若遇到崩溃，可在 Visual Studio 中查看调用堆栈以定位问题。
+> 3. 直接运行项目`osu.coreclr.exe`并更新时，不确定更新完毕后的行为。可能是直接进入游戏，也可能会重启并恢复到.NET Framework运行环境。 
 
 ### 高级配置
 - **启用联网**：修改 `osu.Loader` 项目中的 `Loader.cs`，移除禁止联网的代码，**仅需重新编译 `osu.Loader`，无需重新签名 `osu.coreclr.exe`**。
