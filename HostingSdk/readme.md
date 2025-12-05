@@ -5,7 +5,7 @@
 ## 这些东西去哪下
 
 [点这个链接](https://www.nuget.org/packages?q=runtime.+.Microsoft.NETCore.DotNetAppHost)搜一个合适的，
-比如runtime.win-x64.Microsoft.NETCore.DotNetAppHost，点进去再点_Download Package_，下回来的nuget包当zip解压就行
+比如runtime.win-x86.Microsoft.NETCore.DotNetAppHost，点进去再点_Download Package_，下回来的nuget包当zip解压就行
 
 ## 怎么放
 
