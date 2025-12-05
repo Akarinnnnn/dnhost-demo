@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.1.32407.343
+# Visual Studio Version 18
+VisualStudioVersion = 18.3.11206.111 d18.3
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "NativeHost", "NativeHost\NativeHost.vcxproj", "{450B9073-A303-4F83-B6E8-806EFE3D304A}"
 EndProject
@@ -18,10 +18,6 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "osu.Loader", "osu.Loader\osu.Loader.csproj", "{30F2E723-05F8-40CC-9F63-FEE9026F3A53}"
 EndProject
 Global
-	GlobalSection(SharedMSBuildProjectFiles) = preSolution
-		HostingSdk\HostingSdk.vcxitems*{1eed0cdb-7277-474c-88d0-89061641fb0d}*SharedItemsImports = 4
-		HostingSdk\HostingSdk.vcxitems*{4e65dd26-649d-48ad-b349-b7a2f104c3ea}*SharedItemsImports = 9
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
 		Debug|x64 = Debug|x64
@@ -107,5 +103,10 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5B784D94-C417-423A-9204-55D5A09698FF}
+	EndGlobalSection
+	GlobalSection(SharedMSBuildProjectFiles) = preSolution
+		HostingSdk\HostingSdk.vcxitems*{1eed0cdb-7277-474c-88d0-89061641fb0d}*SharedItemsImports = 4
+		HostingSdk\HostingSdk.vcxitems*{450b9073-a303-4f83-b6e8-806efe3d304a}*SharedItemsImports = 4
+		HostingSdk\HostingSdk.vcxitems*{4e65dd26-649d-48ad-b349-b7a2f104c3ea}*SharedItemsImports = 9
 	EndGlobalSection
 EndGlobal

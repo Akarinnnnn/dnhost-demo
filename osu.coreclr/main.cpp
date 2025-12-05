@@ -2,8 +2,8 @@
 
 #include <windows.h>
 #include "fxr.hpp"
-#include <6.0.4/inc/nethost.h>
-#include <6.0.4/inc/coreclr_delegates.h>
+#include <10.0.0/inc/nethost.h>
+#include <10.0.0/inc/coreclr_delegates.h>
 
 #include <concepts>
 #include <span>
@@ -84,13 +84,13 @@ void UseNethost(std::filesystem::path& fxr, std::filesystem::path& osu)
 		hr = get_hostfxr_path(buff.data(), &pathSize, nullptr);
 	}
 
-	if (hr != 0) exit(1); // TODO throw fnf? interactive?
+	if (hr != 0) exit(hr); // TODO throw fnf? interactive?
 	fxr = std::wstring_view{ buff.data(), pathSize };
 
 	osu = std::filesystem::current_path();
 	osu /= L"osu!.exe";
 	if (!std::filesystem::exists(osu))
-		exit(1); // TODO
+		exit(2); // TODO
 }
 
 void SaveConfig(std::filesystem::path& fxr, std::filesystem::path& osu)
@@ -167,7 +167,7 @@ void InitHostContext(HostFxR& fxr, std::filesystem::path& fx, std::filesystem::p
 		nullptr
 	};
 
-	HRESULT hr = fxr.InitCfg(L"runtimeconfig.json", &params, &fxr.Handle);
+	HRESULT hr = fxr.InitCfg(L"osu!.runtimeconfig.json", &params, &fxr.Handle);
 	if (FAILED(hr)) exit(hr);
 }
 
@@ -260,8 +260,9 @@ int wmain(int argc, wchar_t** argv)
 #pragma region fxr execute
 	DWORD exitcode = 0;
 	int (*LoadAndExecute)(int argc, const wchar_t** argv, const wchar_t* osuExe, int asmPathLen) = nullptr;
+	std::filesystem::path loaderPath = std::filesystem::current_path() / L"osu.Loader.dll";
 	hr = getDelegate(
-		L"osu.Loader.dll",
+		loaderPath.c_str(),
 		L"osu.Loader.Loader, osu.Loader",
 		L"LoadAndExecute",
 		UNMANAGEDCALLERSONLY_METHOD,

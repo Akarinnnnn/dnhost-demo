@@ -102,26 +102,34 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)HostingSdk\6.0.4\$(PlatformShortName);$(LibraryPath)</LibraryPath>
+    <TargetName>osu!.exe</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SignedDebug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <LibraryPath>$(SolutionDir)HostingSdk\6.0.4\$(PlatformShortName);$(LibraryPath)</LibraryPath>
+    <LibraryPath>$(SolutionDir)HostingSdk\10.0.0\$(PlatformShortName);$(LibraryPath)</LibraryPath>
+    <TargetName>osu.coreclr</TargetName>
+    <OutDir>$(SolutionDir)osu.Loader\bin\Debug\net10.0-windows\</OutDir>
+    <IntDir>obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(SolutionDir)HostingSdk\6.0.4\$(PlatformShortName);$(LibraryPath)</LibraryPath>
+    <TargetName>osu!.exe</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)HostingSdk\6.0.4\$(PlatformShortName);$(LibraryPath)</LibraryPath>
+    <TargetName>osu!.exe</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='SignedDebug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <LibraryPath>$(SolutionDir)HostingSdk\6.0.4\$(PlatformShortName);$(LibraryPath)</LibraryPath>
+    <TargetName>osu!.exe</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(SolutionDir)HostingSdk\6.0.4\$(PlatformShortName);$(LibraryPath)</LibraryPath>
+    <TargetName>osu.coreclr.host.exe</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -135,7 +143,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SignedDebug|Win32'">
@@ -169,7 +177,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -184,7 +192,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='SignedDebug|x64'">
@@ -199,7 +207,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -218,7 +226,7 @@
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalDependencies>nethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libnethost.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
@@ -226,6 +234,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="fxr.hpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\osu.Loader\osu.Loader.csproj">
+      <Project>{30f2e723-05f8-40cc-9f63-fee9026f3a53}</Project>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

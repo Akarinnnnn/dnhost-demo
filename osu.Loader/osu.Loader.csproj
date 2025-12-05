@@ -1,13 +1,30 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-	<PropertyGroup>
-		<TargetFramework>net6.0-windows</TargetFramework>
-		<ImplicitUsings>enable</ImplicitUsings>
-		<Nullable>enable</Nullable>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<UseWindowsForms>true</UseWindowsForms>
-	</PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>net10.0-windows</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+        <UseWindowsForms>true</UseWindowsForms>
+        <OutputType>WinExe</OutputType>
+        <StartupObject>osu.Loader.Program</StartupObject>
+        <GenerateRuntimeConfigurationFiles>true</GenerateRuntimeConfigurationFiles>
+    </PropertyGroup>
 
-	<ItemGroup>
-	</ItemGroup>
+    <PropertyGroup>
+        <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Runtime.Serialization.Formatters" Version="10.0.0" />
+        <None Update="nethost.dll">
+          <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+        <None Update="osu!.exe">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
+    </ItemGroup>
+    <Target Name="CopyRCtCfgsJson" AfterTargets="AfterBuild" Inputs="$(OutputPath)osu.Loader.runtimeconfig.json" Outputs="$(OutputPath)osu!.runtimeconfig.json">
+        <Copy Condition="Exists('$(OutputPath)osu.Loader.runtimeconfig.json')" Sourcefiles="$(OutputPath)osu.Loader.runtimeconfig.json" DestinationFiles="$(OutputPath)osu!.runtimeconfig.json" SkipUnchangedFiles="true" />
+    </Target>
 </Project>

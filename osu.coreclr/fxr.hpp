@@ -1,5 +1,5 @@
 #pragma once
-#include <6.0.4/inc/hostfxr.h>
+#include <10.0.0/inc/hostfxr.h>
 
 struct HostFxR
 {
