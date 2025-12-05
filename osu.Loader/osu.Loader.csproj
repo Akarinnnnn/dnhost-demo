@@ -17,6 +17,9 @@
 
     <ItemGroup>
         <PackageReference Include="System.Runtime.Serialization.Formatters" Version="10.0.0" />
+	</ItemGroup>
+	
+	<ItemGroup>
         <None Update="nethost.dll">
           <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
         </None>
@@ -27,4 +30,9 @@
     <Target Name="CopyRCtCfgsJson" AfterTargets="AfterBuild" Inputs="$(OutputPath)osu.Loader.runtimeconfig.json" Outputs="$(OutputPath)osu!.runtimeconfig.json">
         <Copy Condition="Exists('$(OutputPath)osu.Loader.runtimeconfig.json')" Sourcefiles="$(OutputPath)osu.Loader.runtimeconfig.json" DestinationFiles="$(OutputPath)osu!.runtimeconfig.json" SkipUnchangedFiles="true" />
     </Target>
+	<Target Name="InjectMscorlibStub" BeforeTargets="CoreCompile">
+		<ItemGroup>
+			<Reference Include="$(MicrosoftNETCoreAppRefPackRefDir)mscorlib.dll" />
+		</ItemGroup>
+	</Target>
 </Project>
