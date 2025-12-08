@@ -30,9 +30,4 @@
     <Target Name="CopyRCtCfgsJson" AfterTargets="AfterBuild" Inputs="$(OutputPath)osu.Loader.runtimeconfig.json" Outputs="$(OutputPath)osu!.runtimeconfig.json">
         <Copy Condition="Exists('$(OutputPath)osu.Loader.runtimeconfig.json')" Sourcefiles="$(OutputPath)osu.Loader.runtimeconfig.json" DestinationFiles="$(OutputPath)osu!.runtimeconfig.json" SkipUnchangedFiles="true" />
     </Target>
-	<Target Name="InjectMscorlibStub" BeforeTargets="CoreCompile">
-		<ItemGroup>
-			<Reference Include="$(MicrosoftNETCoreAppRefPackRefDir)mscorlib.dll" />
-		</ItemGroup>
-	</Target>
 </Project>
